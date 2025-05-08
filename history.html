@@ -91,21 +91,6 @@
         .history-table .delete-btn:hover {
             background-color: #DC2626;
         }
-        .export-pdf-btn {
-            background-color: #4A90E2;
-            color: #FFFFFF;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 1em;
-            font-family: 'Roboto', sans-serif;
-            transition: background-color 0.2s;
-        }
-        .export-pdf-btn:hover {
-            background-color: #357ABD;
-        }
         .error-message {
             color: #EF4444;
             margin-top: 15px;
@@ -179,13 +164,21 @@
             <tbody id="history-table-body"></tbody>
         </table>
     </div>
-    <button class="export-pdf-btn" onclick="exportToPDF()">Xuất file PDF</button>
 
     <footer>
         <p>© 2025 Tài liệu kiểm tra | Thiết kế bởi Thuận</p>
     </footer>
 
     <script>
+        const sectionPoints = {
+            1: 15,
+            2: 15,
+            3: 15,
+            4: 15,
+            5: 30,
+            6: 10
+        };
+
         function normalizeString(str) {
             return str
                 .normalize('NFKC')
@@ -227,14 +220,14 @@
                         <td>${entry.date}</td>
                         <td>${entry.name}</td>
                         <td>${entry.className}</td>
-                        <td>${entry.section1}</td>
-                        <td>${entry.section2}</td>
-                        <td>${entry.section3}</td>
-                        <td>${entry.section4}</td>
-                        <td>${entry.section5}</td>
-                        <td>${entry.section6}</td>
-                        <td>${entry.totalScore}</td>
-                        <td>${entry.percentage}%</td>
+                        <td>${entry.section1}/${sectionPoints[1]}</td>
+                        <td>${entry.section2}/${sectionPoints[2]}</td>
+                        <td>${entry.section3}/${sectionPoints[3]}</td>
+                        <td>${entry.section4}/${sectionPoints[4]}</td>
+                        <td>${entry.section5}/${sectionPoints[5]}</td>
+                        <td>${entry.section6}/${sectionPoints[6]}</td>
+                        <td>${entry.totalScore}/100</td>
+                        <td>${Math.round(entry.percentage)}%</td>
                         <td class="${rankClass}">${evaluation}</td>
                         <td><button class="delete-btn" onclick="deleteHistoryEntry(${index})">Xóa</button></td>
                     </tr>
@@ -262,80 +255,6 @@
                     console.error('Error deleting history entry:', error);
                     document.getElementById('message').textContent = 'Đã xảy ra lỗi khi xóa kết quả: ' + error.message;
                 }
-            }
-        }
-
-        function escapeLatex(str) {
-            return str.replace(/([&%$#_{}])/g, '\\$1')
-                      .replace(/\\/g, '\\textbackslash')
-                      .replace(/~/g, '\\textasciitilde')
-                      .replace(/\^/g, '\\textasciicircum');
-        }
-
-        function exportToPDF() {
-            const testHistory = JSON.parse(localStorage.getItem('testHistory') || '[]');
-            if (testHistory.length === 0) {
-                document.getElementById('message').textContent = 'Không có dữ liệu để xuất PDF.';
-                return;
-            }
-
-            let tableRows = '';
-            testHistory.forEach(entry => {
-                const evaluation = getEvaluation(entry.percentage);
-                tableRows += `
-                    ${escapeLatex(entry.startTime)} & ${escapeLatex(entry.endTime)} & ${escapeLatex(entry.date)} & 
-                    ${escapeLatex(entry.name)} & ${escapeLatex(entry.className)} & 
-                    ${entry.section1} & ${entry.section2} & ${entry.section3} & ${entry.section4} & ${entry.section5} & 
-                    ${entry.section6} & ${entry.totalScore} & ${entry.percentage}\\% & ${evaluation} & \\\\
-                    \\hline
-                `;
-            });
-
-            const latexContent = `
-                \\documentclass[a4paper,12pt]{article}
-                \\usepackage{geometry}
-                \\geometry{a4paper, margin=1in}
-                \\usepackage[utf8]{vietnam}
-                \\usepackage{array}
-                \\usepackage{booktabs}
-                \\usepackage{longtable}
-                \\usepackage{xcolor}
-                \\usepackage{amsmath}
-                \\usepackage{amsfonts}
-                \\usepackage{setspace}
-                \\usepackage[normalem]{ulem}
-                \\usepackage{tocloft}
-                \\usepackage{pdfpages}
-                \\usepackage{hyperref}
-                \\usepackage{enumitem}
-                \\usepackage{titlesec}
-                \\usepackage{lmodern}
-                \\usepackage[T1]{fontenc}
-                \\begin{document}
-                \\begin{center}
-                    \\textbf{\\Large Lịch sử kiểm tra}
-                \\end{center}
-                \\vspace{1cm}
-                \\begin{longtable}{|>{\\centering\\arraybackslash}m{2cm}|>{\\centering\\arraybackslash}m{2cm}|>{\\centering\\arraybackslash}m{2.5cm}|>{\\centering\\arraybackslash}m{3cm}|>{\\centering\\arraybackslash}m{2cm}|>{\\centering\\arraybackslash}m{1.5cm}|>{\\centering\\arraybackslash}m{1.5cm}|>{\\centering\\arraybackslash}m{1.5cm}|>{\\centering\\arraybackslash}m{1.5cm}|>{\\centering\\arraybackslash}m{1.5cm}|>{\\centering\\arraybackslash}m{1.5cm}|>{\\centering\\arraybackslash}m{1.5cm}|>{\\centering\\arraybackslash}m{1.5cm}|>{\\centering\\arraybackslash}m{1.5cm}|}
-                    \\hline
-                    \\textbf{Thời gian bắt đầu} & \\textbf{Thời gian kết thúc} & \\textbf{Ngày} & \\textbf{Tên} & \\textbf{Lớp} & \\textbf{問題 I} & \\textbf{問題 II} & \\textbf{問題 III} & \\textbf{問題 IV} & \\textbf{問題 V} & \\textbf{問題 VI} & \\textbf{Tổng} & \\textbf{Tỷ lệ} & \\textbf{Xếp loại} \\\\
-                    \\hline
-                    \\endhead
-                    ${tableRows}
-                \\end{longtable}
-                \\end{document}
-            `;
-
-            try {
-                const blob = new Blob([latexContent], { type: 'text/plain' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'lich_su_kiem_tra.tex';
-                link.click();
-                document.getElementById('message').textContent = 'Đã tạo file LaTeX. Vui lòng biên dịch bằng latexmk để tạo PDF.';
-            } catch (error) {
-                console.error('Error exporting PDF:', error);
-                document.getElementById('message').textContent = 'Đã xảy ra lỗi khi xuất PDF: ' + error.message;
             }
         }
 
