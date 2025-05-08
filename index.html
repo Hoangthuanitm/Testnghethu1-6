@@ -31,8 +31,13 @@
         } catch (error) {
             console.error('Lỗi khởi tạo Firebase:', error);
             document.addEventListener('DOMContentLoaded', () => {
-                document.getElementById('message-info').textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra cấu hình.';
+                document.getElementById('message-info').textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra kết nối mạng và thử lại.';
             });
+        }
+
+        // Kiểm tra kết nối mạng
+        function checkNetworkStatus() {
+            return navigator.onLine;
         }
 
         // Logic chính của ứng dụng
@@ -222,8 +227,15 @@
             scoreDisplay.innerHTML = resultTable;
             resultSection.style.display = 'block';
 
+            if (!checkNetworkStatus()) {
+                messageResult.textContent = 'Không có kết nối mạng. Kết quả không được lưu. Vui lòng kiểm tra mạng và thử lại.';
+                console.error('Không có kết nối mạng khi lưu kết quả');
+                return;
+            }
+
             if (db) {
                 try {
+                    console.log('Đang lưu kết quả vào Firestore...');
                     await addDoc(collection(db, 'testHistory'), {
                         startTime: formatTime(startTime),
                         endTime: formatTime(endTime),
@@ -239,21 +251,31 @@
                         totalScore: totalScore,
                         percentage: percentage,
                         evaluation: evaluation,
-                        timestamp: new Date()
+                        timestamp: new Date(),
+                        userAgent: navigator.userAgent // Thêm thông tin thiết bị để gỡ lỗi
                     });
                     console.log('Kết quả đã lưu vào Firestore');
+                    messageResult.textContent = 'Kết quả đã được lưu thành công!';
                     logEvent(analytics, 'submit_test', {
                         name: name,
                         class: className,
                         total_score: totalScore,
-                        evaluation: evaluation
+                        evaluation: evaluation,
+                        device: navigator.userAgent
                     });
                 } catch (error) {
                     console.error('Lỗi khi lưu vào Firestore:', error);
-                    messageResult.textContent = 'Đã xảy ra lỗi khi lưu kết quả: ' + error.message;
+                    let errorMessage = 'Đã xảy ra lỗi khi lưu kết quả: ' + error.message;
+                    if (error.code === 'permission-denied') {
+                        errorMessage = 'Không có quyền lưu kết quả. Vui lòng kiểm tra cấu hình cơ sở dữ liệu.';
+                    } else if (error.code === 'unavailable') {
+                        errorMessage = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra mạng.';
+                    }
+                    messageResult.textContent = errorMessage;
                 }
             } else {
-                messageResult.textContent = 'Không thể lưu kết quả do lỗi kết nối cơ sở dữ liệu.';
+                messageResult.textContent = 'Không thể lưu kết quả do lỗi khởi tạo cơ sở dữ liệu. Vui lòng thử lại.';
+                console.error('Firestore không được khởi tạo');
             }
         }
 
@@ -320,6 +342,22 @@
             });
 
             document.getElementById('submit-test').addEventListener('click', submitTest);
+
+            // Thêm sự kiện cho nút Lịch sử kiểm tra
+            document.getElementById('history-button').addEventListener('click', () => {
+                console.log('Nút Lịch sử kiểm tra được bấm');
+                showPasswordModal();
+            });
+
+            // Theo dõi trạng thái mạng
+            window.addEventListener('online', () => {
+                console.log('Mạng đã kết nối');
+                document.getElementById('message-info').textContent = '';
+            });
+            window.addEventListener('offline', () => {
+                console.log('Mất kết nối mạng');
+                document.getElementById('message-info').textContent = 'Mất kết nối mạng. Vui lòng kiểm tra kết nối.';
+            });
         });
 
         // Gắn các hàm cần truy cập từ HTML vào window
@@ -472,6 +510,11 @@
         button.reset:hover {
             background-color: #DC2626;
         }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
         .vietnamese {
             font-family: 'Roboto', sans-serif;
             font-style: italic;
@@ -622,6 +665,14 @@
             .password-box {
                 width: 80%;
             }
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            button {
+                width: 100%;
+                margin-right: 0;
+            }
         }
     </style>
 </head>
@@ -652,7 +703,10 @@
         </div>
     </div>
 
-    <button id="start-test" type="button">Bắt đầu làm bài</button>
+    <div class="button-group">
+        <button id="start-test" type="button">Bắt đầu làm bài</button>
+        <button id="history-button" type="button">Lịch sử kiểm tra</button>
+    </div>
     <div id="message-info" class="error-message"></div>
 
     <div id="timer" class="timer" style="display: none;">Thời gian còn lại: 20:00</div>
