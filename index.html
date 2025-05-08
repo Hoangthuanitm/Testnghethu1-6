@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>総合テスト 第1～6課（聴解）</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <script type="module">
@@ -252,7 +252,7 @@
                         percentage: percentage,
                         evaluation: evaluation,
                         timestamp: new Date(),
-                        userAgent: navigator.userAgent // Thêm thông tin thiết bị để gỡ lỗi
+                        userAgent: navigator.userAgent
                     });
                     console.log('Kết quả đã lưu vào Firestore');
                     messageResult.textContent = 'Kết quả đã được lưu thành công!';
@@ -343,13 +343,11 @@
 
             document.getElementById('submit-test').addEventListener('click', submitTest);
 
-            // Thêm sự kiện cho nút Lịch sử kiểm tra
             document.getElementById('history-button').addEventListener('click', () => {
                 console.log('Nút Lịch sử kiểm tra được bấm');
                 showPasswordModal();
             });
 
-            // Theo dõi trạng thái mạng
             window.addEventListener('online', () => {
                 console.log('Mạng đã kết nối');
                 document.getElementById('message-info').textContent = '';
@@ -360,39 +358,49 @@
             });
         });
 
-        // Gắn các hàm cần truy cập từ HTML vào window
         window.checkPassword = checkPassword;
         window.showPasswordModal = showPasswordModal;
         window.closePasswordModal = closePasswordModal;
         window.resetTest = resetTest;
     </script>
     <style>
-        body {
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
             font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+            background-color: #F5F7FA;
+            color: #333;
+            touch-action: pan-y;
+        }
+        body {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #F5F7FA;
             font-size: 16px;
             line-height: 1.6;
-            color: #333;
+            box-sizing: border-box;
+        }
+        * {
+            box-sizing: border-box;
         }
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             padding: 15px;
             background-color: #FFFFFF;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         .header h1 {
-            font-size: 1.8em;
+            font-size: 1.6em;
             margin: 0;
             color: #4A90E2;
         }
         .header h2 {
-            font-size: 1.4em;
-            margin: 10px 0;
+            font-size: 1.3em;
+            margin: 8px 0;
             color: #333;
         }
         .student-info {
@@ -411,31 +419,33 @@
             font-weight: 500;
             color: #4A90E2;
             display: block;
+            font-size: 16px;
         }
         .student-info input {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #D1D5DB;
             border-radius: 6px;
             font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
             transition: border-color 0.2s;
-            box-sizing: border-box;
         }
         .student-info input:focus {
             border-color: #4A90E2;
             outline: none;
         }
         .question-section {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             background-color: #FFFFFF;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             display: none;
         }
         .question {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
             border-bottom: 1px solid #E0E4EA;
         }
         .options {
@@ -443,35 +453,40 @@
             flex-direction: column;
         }
         .option {
-            margin: 8px 0;
+            margin: 10px 0;
             display: flex;
             align-items: center;
         }
         .option input {
             margin-right: 12px;
+            width: 20px;
+            height: 20px;
             accent-color: #4A90E2;
         }
         .option label {
-            font-size: 1em;
+            font-size: 16px;
             color: #333;
+            line-height: 1.5;
         }
         .example {
             background-color: #F9FAFB;
-            padding: 15px;
+            padding: 12px;
             border-left: 4px solid #4A90E2;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-radius: 6px;
         }
         .image-placeholder {
-            width: 300px;
-            height: 240px;
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            aspect-ratio: 5/4;
             border: 1px dashed #D1D5DB;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 10px 0;
             background-color: #F9FAFB;
-            font-size: 0.9em;
+            font-size: 14px;
             overflow: hidden;
         }
         .image-placeholder img {
@@ -482,9 +497,9 @@
         h2 {
             background-color: #4A90E2;
             color: #FFFFFF;
-            padding: 12px 15px;
+            padding: 10px 12px;
             border-radius: 8px;
-            font-size: 1.3em;
+            font-size: 1.2em;
             margin-top: 0;
         }
         button {
@@ -494,15 +509,16 @@
             padding: 12px 24px;
             border-radius: 8px;
             cursor: pointer;
-            margin-top: 20px;
-            font-size: 1em;
+            margin-top: 15px;
+            font-size: 16px;
             font-family: 'Roboto', sans-serif;
-            transition: background-color 0.2s, transform 0.1s;
-            margin-right: 10px;
+            transition: background-color 0.2s;
+            min-height: 48px;
+            width: 100%;
+            max-width: 200px;
         }
         button:hover {
             background-color: #357ABD;
-            transform: translateY(-1px);
         }
         button.reset {
             background-color: #EF4444;
@@ -512,50 +528,55 @@
         }
         .button-group {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
+            justify-content: center;
         }
         .vietnamese {
             font-family: 'Roboto', sans-serif;
             font-style: italic;
             color: #6B7280;
-            margin-bottom: 15px;
-            font-size: 0.95em;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.5;
         }
         .result-section {
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 20px;
+            padding: 15px;
             background-color: #FFFFFF;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             display: none;
         }
         .error-message {
             color: #EF4444;
-            margin-top: 15px;
-            font-size: 0.95em;
+            margin-top: 10px;
+            font-size: 14px;
+            line-height: 1.5;
         }
         .student-details {
-            margin-bottom: 20px;
-            padding: 15px;
+            margin-bottom: 15px;
+            padding: 12px;
             background-color: #F9FAFB;
             border-radius: 8px;
         }
         .student-details p {
-            margin: 8px 0;
-            font-size: 1em;
+            margin: 6px 0;
+            font-size: 14px;
             color: #333;
+            line-height: 1.5;
         }
         .result-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            margin-top: 10px;
+            font-size: 14px;
         }
         .result-table th, .result-table td {
             border: 1px solid #E0E4EA;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
-            font-size: 0.9em;
         }
         .result-table th {
             background-color: #4A90E2;
@@ -571,11 +592,11 @@
         }
         footer {
             text-align: center;
-            margin-top: 40px;
-            padding: 20px 0;
+            margin-top: 30px;
+            padding: 15px 0;
             border-top: 1px solid #E0E4EA;
             color: #6B7280;
-            font-size: 0.9em;
+            font-size: 14px;
             font-family: 'Roboto', sans-serif;
         }
         .correct-answer {
@@ -586,23 +607,26 @@
         }
         .answer-feedback {
             margin-top: 8px;
-            font-size: 0.9em;
+            font-size: 14px;
             color: #4A90E2;
+            line-height: 1.5;
         }
         .answer-feedback.wrong {
             color: #EF4444;
         }
         .timer {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             background-color: #4A90E2;
             color: #FFFFFF;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 8px;
-            font-size: 1.2em;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             z-index: 1000;
+            max-width: 200px;
+            text-align: center;
         }
         .timer.warning {
             background-color: #EF4444;
@@ -626,10 +650,10 @@
             background-color: #FFFFFF;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             text-align: center;
-            max-width: 400px;
-            width: 90%;
+            max-width: 90%;
+            width: 400px;
         }
         .password-box input {
             width: 100%;
@@ -638,14 +662,19 @@
             border: 1px solid #D1D5DB;
             border-radius: 6px;
             font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
         }
         .password-box button {
             margin: 10px 5px;
+            width: auto;
+            max-width: 150px;
         }
         .password-error {
             color: #EF4444;
-            font-size: 0.9em;
+            font-size: 14px;
             margin-top: 10px;
+            line-height: 1.5;
         }
         .rank-a {
             color: #4A90E2;
@@ -656,22 +685,67 @@
             font-weight: 500;
         }
         @media (max-width: 600px) {
-            .timer {
-                top: 10px;
-                right: 10px;
-                font-size: 1em;
-                padding: 8px 16px;
+            body {
+                padding: 10px;
             }
-            .password-box {
-                width: 80%;
+            .header {
+                padding: 10px;
+            }
+            .header h1 {
+                font-size: 1.4em;
+            }
+            .header h2 {
+                font-size: 1.1em;
+            }
+            .student-info {
+                padding: 10px;
+            }
+            .student-info input {
+                padding: 8px;
+            }
+            .question-section {
+                padding: 10px;
+            }
+            .image-placeholder {
+                max-width: 100%;
+                height: auto;
+            }
+            .timer {
+                top: 5px;
+                right: 5px;
+                font-size: 12px;
+                padding: 6px 12px;
+                max-width: 150px;
             }
             .button-group {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
             }
             button {
-                width: 100%;
-                margin-right: 0;
+                max-width: 100%;
+            }
+            .result-table {
+                font-size: 12px;
+            }
+            .result-table th, .result-table td {
+                padding: 6px;
+            }
+            .password-box {
+                width: 90%;
+                padding: 15px;
+            }
+        }
+        @media (max-width: 400px) {
+            .option input {
+                width: 18px;
+                height: 18px;
+            }
+            .option label {
+                font-size: 14px;
+            }
+            button {
+                padding: 10px;
+                font-size: 14px;
             }
         }
     </style>
