@@ -1185,7 +1185,7 @@
             scoreDisplay.innerHTML = resultTable;
             resultSection.style.display = 'block';
 
-            const testHistory = JSON.parse(localStorage.getItem('testHistory') || '[]');
+            const testHistory = JSON.parse(localStorage.getItem('testHistory1-6') || '[]');
             testHistory.push({
                 startTime: formatTime(startTime),
                 endTime: formatTime(endTime),
@@ -1202,7 +1202,7 @@
                 percentage,
                 evaluation
             });
-            localStorage.setItem('testHistory', JSON.stringify(testHistory));
+            localStorage.setItem('testHistory1-6', JSON.stringify(testHistory));
         }
 
         function resetTest() {
