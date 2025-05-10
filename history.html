@@ -78,7 +78,7 @@
 
             try {
                 // Truy xuất dữ liệu từ Firestore
-                const snapshot = await getDocs(collection(db, 'testHistory1-6'));
+                const snapshot = await getDocs(collection(db, 'testHistory'));
                 testHistory = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
                 if (searchTerm) {
