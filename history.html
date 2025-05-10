@@ -33,18 +33,20 @@
         }
         .search-section {
             margin-bottom: 20px;
-            min-height: 60px; /* Đảm bảo ô tìm kiếm có không gian hiển thị */
-            display: block; /* Đảm bảo luôn hiển thị */
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Khoảng cách giữa nhãn và input */
+            flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình rất nhỏ */
         }
         .search-section label {
             font-weight: 500;
             color: #4A90E2;
-            display: block;
-            margin-bottom: 5px;
+            margin: 0;
+            white-space: nowrap; /* Ngăn nhãn bị ngắt dòng */
         }
         .search-section input {
             width: 100%;
-            max-width: 400px;
             padding: 8px;
             border: 1px solid #D1D5DB;
             border-radius: 6px;
@@ -53,6 +55,8 @@
             transition: border-color 0.2s;
             box-sizing: border-box;
             touch-action: manipulation;
+            flex: 1; /* Input chiếm phần còn lại của không gian */
+            min-width: 200px; /* Đảm bảo input có kích thước tối thiểu */
         }
         .search-section input:focus {
             border-color: #4A90E2;
@@ -60,7 +64,7 @@
         }
         .table-container {
             overflow-x: auto;
-            margin-top: 20px; /* Tạo khoảng cách với ô tìm kiếm */
+            margin-top: 20px;
         }
         .history-table {
             width: 100%;
@@ -131,11 +135,14 @@
                 max-width: 150px;
             }
             .search-section {
-                padding: 10px; /* Tăng padding cho dễ nhìn trên mobile */
+                padding: 10px;
+            }
+            .search-section label {
+                font-size: 14px; /* Giảm kích thước nhãn trên mobile */
             }
             .search-section input {
-                max-width: 100%;
-                font-size: 14px; /* Giảm kích thước chữ cho phù hợp */
+                font-size: 14px; /* Giảm kích thước chữ input */
+                min-width: 150px; /* Đảm bảo input có kích thước đủ dùng trên mobile */
             }
         }
     </style>
@@ -377,7 +384,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderHistoryTable();
             const searchInput = document.getElementById('search');
-            console.log('Search input:', searchInput); // Debug: Kiểm tra ô tìm kiếm có tồn tại không
+            console.log('Search input:', searchInput); // Debug: Kiểm tra ô tìm kiếm
             if (searchInput) {
                 searchInput.addEventListener('input', () => {
                     renderHistoryTable(searchInput.value.trim());
