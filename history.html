@@ -146,7 +146,7 @@
 
             if (confirm('Bạn có chắc chắn muốn xóa kết quả này không?')) {
                 try {
-                    await deleteDoc(doc(db, 'testHistory', docId));
+                    await deleteDoc(doc(db, 'testHistory1-6', docId));
                     // Ghi sự kiện xóa bản ghi vào Analytics
                     logEvent(analytics, 'delete_test_record', { doc_id: docId });
                     renderHistoryTable(document.getElementById('search')?.value.trim() || '');
