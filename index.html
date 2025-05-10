@@ -332,6 +332,7 @@
     </div>
 
     <button id="start-test" type="button">Bắt đầu làm bài</button>
+    <button id="history-test" type="button" onclick="window.showPasswordModal()">Lịch sử kiểm tra</button>
     <div id="message-info" class="error-message"></div>
 
     <div id="timer" class="timer" style="display: none;">Thời gian còn lại: 20:00</div>
@@ -459,10 +460,6 @@
                     <input type="radio" id="example2-3" name="example2">
                     <label for="example2-3">3. デパート</label>
                 </div>
-                <div class="option">
-                    <input type="radio" id="example2-4" name="example2">
-                    <label for="example2-4">4. レストラン</label>
-                </div>
             </div>
             <div class="answer-feedback" id="feedback-example2"></div>
         </div>
@@ -574,7 +571,7 @@
                 </div>
                 <div class="option">
                     <input type="radio" id="q7-3" name="q7">
-                    <label for="q7-3">3</label>
+                    <label for "q7-3">3</label>
                 </div>
             </div>
             <div class="answer-feedback" id="feedback-7"></div>
@@ -1209,6 +1206,7 @@
             document.getElementById('timer').style.display = 'none';
             document.getElementById('submit-test').style.display = 'none';
             document.getElementById('start-test').style.display = 'block';
+            document.getElementById('history-test').style.display = 'block';
             document.querySelectorAll('.question-section').forEach(section => {
                 section.style.display = 'none';
             });
@@ -1241,6 +1239,7 @@
 
             messageInfo.textContent = '';
             document.getElementById('start-test').style.display = 'none';
+            document.getElementById('history-test').style.display = 'none';
             document.querySelectorAll('.question-section').forEach(section => {
                 section.style.display = 'block';
             });
