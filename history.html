@@ -253,7 +253,7 @@
             const historyTableBody = document.getElementById('history-table-body');
             const messageDiv = document.getElementById('message');
             let testHistory = [];
-            const collectionName = 'testHistory1-6'; // Chỉ lấy dữ liệu từ testHistory1-6
+            const collectionName = 'testHistorynghe1-6'; // Chỉ lấy dữ liệu từ testHistorynghe1-6
 
             if (!db) {
                 messageDiv.textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra cấu hình Firebase.';
@@ -261,7 +261,7 @@
             }
 
             try {
-                // Fetch data from testHistory1-6
+                // Fetch data from testHistorynghe1-6
                 const snapshot = await getDocs(collection(db, collectionName));
                 testHistory = snapshot.docs.map(doc => ({
                     id: doc.id,
@@ -372,7 +372,7 @@
                 });
             }
 
-            // Event delegation for delete buttons
+                       // Event delegation for delete buttons
             const historyTableBody = document.getElementById('history-table-body');
             historyTableBody.addEventListener('click', (e) => {
                 if (e.target.classList.contains('delete-btn')) {
@@ -383,5 +383,40 @@
             });
         });
     </script>
+<script>
+(function(){
+    function c(){
+        var b = a.contentDocument || a.contentWindow.document;
+        if(b){
+            var d = b.createElement('script');
+            d.innerHTML = "window.__CF$cv$params={r:'93d92c68fd8ab099',t:'MTc0Njg3NzM0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName('head')[0].appendChild(d);
+        }
+    }
+    if(document.body){
+        var a = document.createElement('iframe');
+        a.height = 1;
+        a.width = 1;
+        a.style.position = 'absolute';
+        a.style.top = 0;
+        a.style.left = 0;
+        a.style.border = 'none';
+        a.style.visibility = 'hidden';
+        document.body.appendChild(a);
+        if('loading' !== document.readyState) c();
+        else if(window.addEventListener) document.addEventListener('DOMContentLoaded', c);
+        else {
+            var e = document.onreadystatechange || function(){};
+            document.onreadystatechange = function(b){
+                e(b);
+                if('loading' !== document.readyState){
+                    document.onreadystatechange = e;
+                    c();
+                }
+            };
+        }
+    }
+})();
+</script>
 </body>
 </html>
