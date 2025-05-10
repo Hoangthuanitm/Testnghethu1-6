@@ -17,6 +17,7 @@
             color: #333;
             -webkit-text-size-adjust: 100%;
             touch-action: manipulation;
+            overflow: visible;
         }
         .header {
             text-align: center;
@@ -32,18 +33,20 @@
             color: #4A90E2;
         }
         .search-section {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             min-height: 60px;
-            display: flex;
+            display: flex !important;
             align-items: center;
-            gap: 10px; /* Khoảng cách giữa nhãn và input */
-            flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình rất nhỏ */
+            gap: 10px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
         .search-section label {
             font-weight: 500;
             color: #4A90E2;
             margin: 0;
-            white-space: nowrap; /* Ngăn nhãn bị ngắt dòng */
+            white-space: nowrap;
         }
         .search-section input {
             width: 100%;
@@ -55,8 +58,8 @@
             transition: border-color 0.2s;
             box-sizing: border-box;
             touch-action: manipulation;
-            flex: 1; /* Input chiếm phần còn lại của không gian */
-            min-width: 200px; /* Đảm bảo input có kích thước tối thiểu */
+            flex: 1;
+            min-width: 200px;
         }
         .search-section input:focus {
             border-color: #4A90E2;
@@ -136,13 +139,14 @@
             }
             .search-section {
                 padding: 10px;
+                display: flex !important;
             }
             .search-section label {
-                font-size: 14px; /* Giảm kích thước nhãn trên mobile */
+                font-size: 14px;
             }
             .search-section input {
-                font-size: 14px; /* Giảm kích thước chữ input */
-                min-width: 150px; /* Đảm bảo input có kích thước đủ dùng trên mobile */
+                font-size: 14px;
+                min-width: 150px;
             }
         }
     </style>
@@ -382,9 +386,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderHistoryTable();
+            // Debug: Kiểm tra xem search-section có tồn tại không
+            const searchSection = document.querySelector('.search-section');
+            console.log('Search section:', searchSection);
             const searchInput = document.getElementById('search');
-            console.log('Search input:', searchInput); // Debug: Kiểm tra ô tìm kiếm
+            console.log('Search input:', searchInput);
+
+            renderHistoryTable();
             if (searchInput) {
                 searchInput.addEventListener('input', () => {
                     renderHistoryTable(searchInput.value.trim());
