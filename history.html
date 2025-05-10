@@ -140,7 +140,7 @@
     </div>
 
     <div class="search-section">
-        <label for="search">Tìm kiếm:</label＞
+        <label for="search">Tìm kiếm:</label>
         <input type="text" id="search" placeholder="Nhập tên, lớp, ngày (YYYY-MM-DD) hoặc bộ bài kiểm tra">
     </div>
     <div id="message" class="error-message"></div>
@@ -198,7 +198,7 @@
             app = initializeApp(firebaseConfig);
             analytics = getAnalytics(app);
             db = getFirestore(app);
-            // Kích hoạt chế độ offline cho Firestore
+            // Enable offline mode for Firestore
             enableIndexedDbPersistence(db).catch(err => {
                 console.warn('Không thể kích hoạt chế độ offline:', err);
             });
@@ -209,7 +209,7 @@
             });
         }
 
-        // Định nghĩa các hàm Firestore
+        // Define Firestore functions
         const sectionPoints = {
             1: 15,
             2: 15,
@@ -256,7 +256,7 @@
             }
 
             try {
-                // Truy xuất dữ liệu từ tất cả collection
+                // Fetch data from all collections
                 for (const col of collections) {
                     try {
                         const snapshot = await getDocs(collection(db, col));
@@ -268,11 +268,10 @@
                         testHistory = testHistory.concat(docs);
                     } catch (error) {
                         console.warn(`Không thể truy xuất collection ${col}:`, error.message);
-                        // Bỏ qua collection này và tiếp tục với collection khác
                     }
                 }
 
-                // Kiểm tra dữ liệu hợp lệ trước khi sắp xếp
+                // Filter valid data before sorting
                 testHistory = testHistory.filter(entry => {
                     if (!entry.timestamp || typeof entry.timestamp.toDate !== 'function') {
                         console.warn(`Dữ liệu không hợp lệ trong collection ${entry.collection}, id ${entry.id}: Thiếu hoặc sai định dạng timestamp`);
@@ -281,10 +280,10 @@
                     return true;
                 });
 
-                // Sắp xếp theo timestamp (mới nhất trước)
+                // Sort by timestamp (newest first)
                 testHistory.sort((a, b) => b.timestamp.toDate() - a.timestamp.toDate());
 
-                // Lọc theo tìm kiếm
+                // Filter by search term
                 if (searchTerm) {
                     const normalizedSearch = normalizeString(searchTerm);
                     testHistory = testHistory.filter(entry =>
@@ -295,7 +294,7 @@
                     );
                 }
 
-                // Xóa nội dung bảng trước khi hiển thị
+                // Clear table content before rendering
                 historyTableBody.innerHTML = '';
                 testHistory.forEach(entry => {
                     const evaluation = getEvaluation(entry.percentage || 0);
@@ -317,7 +316,7 @@
                             <td>${entry.totalScore || 0}/100</td>
                             <td>${Math.round(entry.percentage || 0)}%</td>
                             <td class="${rankClass}">${evaluation}</td>
-                            <td><button class="delete-btn" onclick="deleteHistoryEntry('${entry.id}', '${entry.collection}')">Xóa</button></td>
+                            <td><button class="delete-btn" data-doc-id="${entry.id}" data-collection="${entry.collection}">Xóa</button></td>
                         </tr>
                     `;
                     historyTableBody.innerHTML += row;
@@ -344,7 +343,7 @@
             }
         }
 
-        window.deleteHistoryEntry = async function(docId, collectionName) {
+        async function deleteHistoryEntry(docId, collectionName) {
             if (!db) {
                 document.getElementById('message').textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra cấu hình Firebase.';
                 return;
@@ -353,7 +352,7 @@
             if (confirm('Bạn có chắc chắn muốn xóa kết quả này không?')) {
                 try {
                     await deleteDoc(doc(db, collectionName, docId));
-                    // Ghi sự kiện xóa bản ghi vào Analytics
+                    // Log delete event to Analytics
                     logEvent(analytics, 'delete_test_record', { doc_id: docId, collection: collectionName });
                     renderHistoryTable(document.getElementById('search')?.value.trim() || '');
                 } catch (error) {
@@ -367,7 +366,7 @@
                     document.getElementById('message').textContent = errorMessage;
                 }
             }
-        };
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             renderHistoryTable();
@@ -377,6 +376,16 @@
                     renderHistoryTable(searchInput.value.trim());
                 });
             }
+
+            // Event delegation for delete buttons
+            const historyTableBody = document.getElementById('history-table-body');
+            historyTableBody.addEventListener('click', (e) => {
+                if (e.target.classList.contains('delete-btn')) {
+                    const docId = e.target.dataset.docId;
+                    const collectionName = e.target.dataset.collection;
+                    deleteHistoryEntry(docId, collectionName);
+                }
+            });
         });
     </script>
 </body>
