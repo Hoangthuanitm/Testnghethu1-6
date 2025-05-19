@@ -313,7 +313,7 @@
     <div class="header">
         <h1>総合テスト</h1>
         <h2>第1～6課（聴解）</h2>
-        <p>時間：14 分</p>
+        <p>時間：20 分</p>
     </div>
 
     <div class="student-info">
@@ -347,7 +347,7 @@
             </div>
             <div class="options">
                 <div class="option">
-                    <input type="radio" id="q1-rei-1" name="q1-rei">
+                    <input type="radio" id="q1-rei-1" name="q1-rei"checked>
                     <label for="q1-rei-1">1</label>
                 </div>
                 <div class="option">
@@ -457,7 +457,7 @@
                     <label for="example2-2">2. えき</label>
                 </div>
                 <div class="option">
-                    <input type="radio" id="example2-3" name="example2">
+                    <input type="radio" id="example2-3" name="example2"checked>
                     <label for="example2-3">3. デパート</label>
                 </div>
             </div>
@@ -549,7 +549,7 @@
                     <label for="example3-2">2</label>
                 </div>
                 <div class="option">
-                    <input type="radio" id="example3-3" name="example3">
+                    <input type="radio" id="example3-3" name="example3"checked>
                     <label for="example3-3">3</label>
                 </div>
             </div>
@@ -708,7 +708,7 @@
                     <label for="example5a-1">1. にっぽん</label>
                 </div>
                 <div class="option">
-                    <input type="radio" id="example5a-2" name="example5a">
+                    <input type="radio" id="example5a-2" name="example5a"checked>
                     <label for="example5a-2">2. にんほ</label>
                 </div>
                 <div class="option">
@@ -785,11 +785,11 @@
                     <label for="example5b-1">1</label>
                 </div>
                 <div class="option">
-                    <input type="radio" id="example5b-2" name="example5b">
+                    <input type="radio" id="example5b-2" name="example5b"checked>
                     <label for="example5b-2">2</label>
                 </div>
                 <div class="option">
-                    <input type="radio" id="example5b-3" name="example5b">
+                    <input type="radio" id="example5b-3" name="example5b"checked>
                     <label for="example5b-3">3</label>
                 </div>
             </div>
@@ -865,7 +865,7 @@
                     <label for="example6-1">1. 4月18日</label>
                 </div>
                 <div class="option">
-                    <input type="radio" id="example6-2" name="example6">
+                    <input type="radio" id="example6-2" name="example6"checked>
                     <label for="example6-2">2. 4月28日</label>
                 </div>
                 <div class="option">
@@ -969,8 +969,8 @@
         const db = getFirestore(app);
 
         const answerKey = {
-            1: 3, 2: 2, 3: 4, 4: 3, 5: 4, 6: 2, 7: 2, 8: 3, 9: 1,
-            10: 2, 11: 1, 12: 3, 13: 3, 14: 1, 15: 1, 16: 2, 17: 3, 18: 1, 19: 2, 20: 4
+            1: 4, 2: 1, 3: 3, 4: 2, 5: 3, 6: 4, 7: 3, 8: 1, 9: 1,
+            10: 1, 11: 1, 12: 2, 13: 3, 14: 2, 15: 2, 16: 3, 17: 1, 18: 2, 19: 2, 20: 3
         };
 
         const sectionPoints = {
@@ -1031,7 +1031,7 @@
 
         function startTimer() {
     startTime = new Date();
-    const totalTime = 14 * 60 * 1000; // 14 phút
+    const totalTime = 20 * 60 * 1000; // 20 phút
     const endTime = new Date(startTime.getTime() + totalTime); // Thời gian kết thúc
     const timerElement = document.getElementById('timer');
 
